@@ -1,80 +1,126 @@
 class Quiz {
-    // YOUR CODE HERE:
-    //Dia 1 17-11-2025
-    // 1. constructor (questions, timeLimit, timeRemaining)
-    constructor(questions, timeLimit, timeRemaining){
-        this.questions = questions;
-        this.timeLimit = timeLimit;
-        this.timeRemaining = timeRemaining;
-        this.correctAnswers = 0;
-        this.currentQuestionIndex = 0;
+
+    /* ============================================================
+       Día 1 – 17/11/2025
+       CONSTRUCTOR  
+       - Recibe: array de preguntas, tiempo total y tiempo restante  
+       - Inicializa contadores y el índice de preguntas  
+       ============================================================ */
+    constructor(questions, timeLimit, timeRemaining) {
+        this.questions = questions;            // Lista de preguntas
+        this.timeLimit = timeLimit;            // Tiempo total del quiz
+        this.timeRemaining = timeRemaining;    // Tiempo restante
+        this.correctAnswers = 0;               // Contador de aciertos
+        this.currentQuestionIndex = 0;         // Índice de la pregunta actual
     }
-    // 2. getQuestion()
-    getQuestion(){
-        return this.questions[this.currentQuestionIndex]
+
+
+    /* ============================================================
+       Día 1  
+       getQuestion()  
+       - Devuelve la pregunta actual según el índice  
+       ============================================================ */
+    getQuestion() {
+        return this.questions[this.currentQuestionIndex];
     }
-    // 3. moveToNextQuestion()
-    moveToNextQuestion(){
+
+
+    /* ============================================================
+       Día 1  
+       moveToNextQuestion()  
+       - Avanza el índice en +1 para pasar a la siguiente pregunta  
+       ============================================================ */
+    moveToNextQuestion() {
         this.currentQuestionIndex++;
     }
 
-    // 4. shuffleQuestions()
-    shuffleQuestions(){
+
+    /* ============================================================
+       Día 1  
+       shuffleQuestions()  
+       - Baraja las preguntas usando Fisher–Yates Shuffle  
+       ============================================================ */
+    shuffleQuestions() {
         let array = this.questions;
-        let randomIdex;
-        for (let i =array.length -1; i > 0; i--){
-            randomIdex = Math.floor(Math.random()*(i+1));
-            [array[i], array[randomIdex]] = [array[randomIdex], array[i]];
+        let randomIndex;
+
+        for (let i = array.length - 1; i > 0; i--) {
+            randomIndex = Math.floor(Math.random() * (i + 1));
+
+            // Intercambia posiciones
+            [array[i], array[randomIndex]] = [array[randomIndex], array[i]];
         }
     }
-    // 5. checkAnswer(answer)
-    checkAnswer(answer){
+
+
+    /* ============================================================
+       Día 1  
+       checkAnswer(answer)  
+       - Comprueba si la respuesta del usuario coincide
+         con la respuesta correcta de la pregunta actual  
+       - Si es correcta, suma +1 al contador  
+       ============================================================ */
+    checkAnswer(answer) {
         const currentQuestion = this.getQuestion();
+
         if (currentQuestion.answer === answer) {
             this.correctAnswers++;
         }
     }
 
-    // 6. hasEnded()
-    hasEnded(){
+
+    /* ============================================================
+       Día 1  
+       hasEnded()  
+       - Retorna true si ya se han respondido todas las preguntas  
+       ============================================================ */
+    hasEnded() {
         return this.currentQuestionIndex === this.questions.length;
     }
 
-    //Dia 2 18-11-2025
+
+    /* ============================================================
+       Día 2 – 18/11/2025  
+       filterQuestionsByDifficulty(difficulty)
+       - Filtra preguntas por nivel 1, 2 o 3  
+       - Reemplaza el array questions con solo las preguntas filtradas  
+       - Reinicia el índice a 0  
+       ============================================================ */
     filterQuestionsByDifficulty(difficulty) {
-        // La dificultad debe ser un número entero entre 1 y 3.
-        if (typeof difficulty !== 'number' || difficulty < 1 || difficulty > 3) {
-            // Si la dificultad no es válida, no modificamos el array de preguntas.
-            return;
+
+        // Validación
+        if (typeof difficulty !== "number" || difficulty < 1 || difficulty > 3) {
+            return; // No modifica nada si el valor no es válido
         }
 
-        // Usamos el método filter() para crear un nuevo array
-        // que solo contenga las preguntas con la dificultad especificada.
+        // Filtra preguntas que coinciden con el nivel elegido
         this.questions = this.questions.filter(question => {
-            // Asumimos que cada objeto de pregunta tiene una propiedad 'difficulty' (número)
             return question.difficulty === difficulty;
         });
 
-        // Opcional: Reiniciar el índice para empezar el quiz con el nuevo conjunto de preguntas
+        // Reiniciar el índice después de filtrar
         this.currentQuestionIndex = 0;
     }
 
+
+    /* ============================================================
+       Día 2 – 18/11/2025  
+       averageDifficulty()  
+       - Calcula el promedio de dificultad de las preguntas  
+       - Usa reduce para sumar todas y divide por la longitud  
+       ============================================================ */
     averageDifficulty() {
-        // Si no hay preguntas, devolvemos 0 para evitar la división por cero
-        if (this.questions.length === 0) {
-            return 0;
-        }
 
-        // 1. Usamos reduce() para sumar los valores de la propiedad 'difficulty'
+        // Evitar división entre cero
+        if (this.questions.length === 0) return 0;
+
         const totalDifficulty = this.questions.reduce((accumulator, question) => {
-            // El acumulador se suma con la dificultad de la pregunta actual
             return accumulator + question.difficulty;
-        }, 0); // El 0 es el valor inicial del acumulador
+        }, 0);
 
-        // 2. Dividimos la suma total por el número de preguntas para obtener el promedio
-        const average = totalDifficulty / this.questions.length;
-
-        // Devolvemos el promedio
-        return average;
+        // Promedio
+        return totalDifficulty / this.questions.length;
     }
-}
+
+}// ← Fin de la clase Quiz
+
